@@ -1,81 +1,104 @@
 <template>
   <div id="app">
-    <HeaderSection />
-    <div class="content">
-      <div class="left">
-        <h3><strong>About</strong></h3>
-        <p>Learn how to care for your plants and keep them healthy!
-          A plant care tracker is essential for ensuring the health and growth of indoor and outdoor plants. 
-          It helps individuals monitor watering schedules, sunlight exposure, and temperature requirements, preventing neglect or overcare. 
-          By tracking plant needs, it promotes better overall care, leading to vibrant, thriving plants. Additionally, it encourages responsibility and enhances one's connection to nature, making plant care more enjoyable and effective.
-        </p>
-        <CareSchedule :careSchedule="careScheduleData" />
-      </div>
-      <div class="right">
-        <PlantGrid :plants="plantsData" />
-      </div>
+    <header>
+      <!-- Close button for handling window close or modal -->
+      <button @click="closeWindow">Close</button>
+      
+      <!-- Header Title -->
+      <h1>WELCOME TO GROWELL GARDEN</h1>
+      
+      <!-- Navigation Buttons -->
+      <button @click="goToSection('plants-section')">List of Plants</button>
+      <button @click="goToSection('contact-section')">Contact</button>
+    </header>
+
+    <!-- Plants Section -->
+    <div id="plants-section">
+      <GrowellGarden />
     </div>
-    <FooterSection />
+
+    <!-- Contact Section -->
+    <footer id="contact-section">
+      <p>CONTACT US</p>
+      <p>Mail to: growellgarden@newhaven.com</p>
+      <p>Cell: +1 (123)-456-7890</p>
+    </footer>
   </div>
 </template>
 
 <script>
-import HeaderSection from "./components/HelloWorld.vue";
-import FooterSection from "./components/FooterMainPage.vue";
-import CareSchedule from "./components/CareSchedule.vue";
-import PlantGrid from "./components/PlantGrid.vue";
+import GrowellGarden from "./components/GrowellGarden.vue";
 
 export default {
   name: "App",
   components: {
-    HeaderSection,
-    FooterSection,
-    CareSchedule,
-    PlantGrid,
+    GrowellGarden,
   },
-  data() {
-    return {
-      plantsData: [
-        { id: 1, name: "Strawberry", image: require("./assets/1.jpg") },
-        { id: 2, name: "Cactus", image: require("./assets/2.jpg") },
-        { id: 3, name: "Sunflower", image: require("./assets/3.jpg") },
-        { id: 4, name: "Mint", image: require("./assets/4.jpg") },
-        { id: 5, name: "Grapes", image: require("./assets/5.jpg") },
-        { id: 6, name: "Pineapple", image: require("./assets/6.jpg") },
-        { id: 7, name: "Marigold", image: require("./assets/7.jpg") },
-        { id: 8, name: "Lilly", image: require("./assets/8.jpg") },
-      ],
-      careScheduleData: [
-        { id: 1, name: "Spider Plant", watering: "Weekly", sunlight: "Indirect" },
-        { id: 2, name: "Peace Lily", watering: "Bi-weekly", sunlight: "Low" },
-        { id: 3, name: "Snake Plant", watering: "Monthly", sunlight: "Indirect" },
-      ],
-    };
+  methods: {
+    // Close function for alert or modal
+    closeWindow() {
+      alert("Window close functionality is restricted by browsers for security reasons.");
+    },
+    // Smoothly scroll to a section by ID
+    goToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      } else {
+        alert("Section not found.");
+      }
+    },
   },
 };
 </script>
 
-<style>
-
-h3 {
-  color: #2e7d32;
-  text-align: center;
-  font-size: 20px;
-}
-
+<style scoped>
 #app {
   font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: white; /* Set the background color to white */
 }
-.content {
+
+header {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+}
+
+header h1 {
+  font-size: 24px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+header button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+header button:hover {
+  background-color: #f0f0f0;
+}
+
+footer {
+  margin-top: 20px;
+  background-color: green;
+  color: white;
+  padding: 10px;
+}
+
+/* Remove light blue background and set the section to have a white background */
+#plants-section {
+  min-height: 500px; /* or set a specific height */
   padding: 20px;
-  text-align: justify;
-}
-.left {
-  flex: 1;
-}
-.right {
-  flex: 2;
+  background-color: white; /* Ensure background is white */
 }
 </style>
