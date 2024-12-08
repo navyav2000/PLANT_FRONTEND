@@ -1,20 +1,28 @@
 <template>
   <div class="plant-grid">
-    <!-- Display plant images -->
     <div class="plant" v-for="plant in plants" :key="plant.apiName">
       <p class="plant-name"><strong>{{ plant.name }}</strong></p>
-      <img :src="require(`@/assets/${plant.image}`)" :alt="plant.name" @click="fetchPlantData(plant.name)" />
+      <img
+        :src="require(`@/assets/${plant.image}`)"
+        :alt="plant.name"
+        @click="fetchPlantData(plant.name)"
+      />
     </div>
 
-    <!-- Display plant details as a centered popup -->
     <div v-if="plantData" class="plant-data-popup">
       <div class="plant-data">
         <button class="close-btn" @click="closePlantData">X</button>
         <h2>{{ plantData.name }}</h2>
         <p><strong>Scientific Name:</strong> {{ plantData.species }}</p>
-        <p><strong>Watering Frequency:</strong> Every {{ plantData.wateringFrequency }} days</p>
+        <p>
+          <strong>Watering Frequency:</strong> Every
+          {{ plantData.wateringFrequency }} days
+        </p>
         <p><strong>Care Instructions:</strong> {{ plantData.careInstructions }}</p>
-        <p><strong>Last Watered:</strong> {{ new Date(plantData.lastWatered).toLocaleDateString() }}</p>
+        <p>
+          <strong>Last Watered:</strong>
+          {{ new Date(plantData.lastWatered).toLocaleDateString() }}
+        </p>
       </div>
     </div>
   </div>
@@ -39,28 +47,34 @@ export default {
     };
   },
   methods: {
-    async fetchPlantData(name) {
-      try {
-        console.log(name);
-        const response = await fetch(`https://plant-backend-lk3m.onrender.com/api/plants/${name}`);
-        if (!response.ok) throw new Error("Failed to fetch plant details.");
+  async fetchPlantData(name) {
+    try {
+      const response = await fetch(
+        `https://plant-backend-lk3m.onrender.com/api`
+      );
+      if (!response.ok) throw new Error("Failed to fetch plant data.");
 
-        const data = await response.json();
-        console.log(data);
-        if (data) {
-          this.plantData = data;
-        } else {
-          throw new Error("Plant not found.");
-        }
-      } catch (error) {
-        console.error("Error fetching plant data:", error);
-        alert("Unable to fetch plant details. Please try again.");
+      const data = await response.json();
+
+      // Find the plant by its name in the full database
+      const plant = data.find((plant) => plant.name.toLowerCase() === name.toLowerCase());
+
+      // If a matching plant is found, assign it to plantData
+      if (plant) {
+        this.plantData = plant;
+      } else {
+        throw new Error("Plant not found.");
       }
-    },
-    closePlantData() {
-      this.plantData = null;
-    },
+    } catch (error) {
+      console.error("Error fetching plant data:", error);
+      alert("Unable to fetch plant details. Please try again.");
+    }
   },
+  closePlantData() {
+    this.plantData = null;
+  },
+},
+
 };
 </script>
 
@@ -89,7 +103,6 @@ export default {
   transform: scale(1.1);
 }
 
-/* Centered popup styling */
 .plant-data-popup {
   position: fixed;
   top: 0;
